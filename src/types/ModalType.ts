@@ -1,0 +1,1 @@
+export type ModalType = "ADD_EMPLOYEE" | "EDIT_EMPLOYEE" | "DELETE_EMPLOYEE" | null;
