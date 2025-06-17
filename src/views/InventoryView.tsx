@@ -8,8 +8,9 @@ import { PlusIcon } from "@heroicons/react/16/solid";
 import { PencilSquareIcon } from "@heroicons/react/16/solid";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { TruckIcon } from "@heroicons/react/16/solid";
+import TopBrandsChart from "../components/TopBrandsChart";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 5;
 
 const InventoryView = () => {
     const { role } = useAuth();
@@ -132,27 +133,29 @@ const InventoryView = () => {
                 </div>
             </div>
             <div className="w-auto flex gap-8 mr-7 ml-7">
-                <div className="flex flex-1 w-full h-66 bg-white rounded-lg p-6 flex-col justify-between">
+                <div className="flex flex-1 w-full bg-white rounded-lg p-6 flex-col gap-8">
                     <h2 className="text-xl font-bold ml-4 text-gray-800">Almacenes</h2>
-                    <div className="w-full flex items-center gap-7 justify-center">
-                        <div className="flex-1 w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
+                    <div className="w-full flex flex-1 items-center gap-7 justify-center">
+                        <div className="w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
                             <TruckIcon className="size-10 mb-3" />
                             <span className="font-bold">A001</span>
                             <h2>COMPUPLAZA</h2>
                         </div>
-                        <div className="flex-1 w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
+                        <div className="w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
                             <TruckIcon className="size-10 mb-3" />
                             <span className="font-bold">A002</span>
                             <h2>COMPUWILSON</h2>
                         </div>
-                        <div className="flex-1 w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
+                        <div className="w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
                             <TruckIcon className="size-10 mb-3" />
                             <span className="font-bold">A001</span>
                             <h2>COMPUPALACE</h2>
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-2 w-full h-65 bg-white rounded-lg"></div>
+                <div className="flex flex-1 justify-center items-center bg-white rounded-lg">
+                    <TopBrandsChart />
+                </div>
             </div>
         </div>
     );
