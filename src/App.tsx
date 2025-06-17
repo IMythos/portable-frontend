@@ -7,6 +7,8 @@ import PurchasesPage from './pages/PurchasesPage'
 import LogisticsPage from './pages/LogisticsPage'
 import InventoryPage from './pages/InventoryPage'
 import LoginPage from './pages/LoginPage'
+import RouteGuard from './auth/RouteGuard'
+import UnauthorizedPage from './pages/UnauthorizedPage'
 
 function App() {
 
@@ -14,12 +16,32 @@ function App() {
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={ <LoginPage />} />
-      <Route path="/dashboard" element={ <HomePage /> } />
-      <Route path="/dashboard/sales" element={ <SalesPage /> } />
-      <Route path="/dashboard/purchases" element={ <PurchasesPage /> } />
-      <Route path="/dashboard/logistics" element={ <LogisticsPage /> } />
-      <Route path="/dashboard/inventory" element={ <InventoryPage /> } />
-      <Route path="/dashboard/login" element={ <LoginPage /> } />
+      <Route path="/unauthorized" element={ <UnauthorizedPage /> } />
+      <Route path="/dashboard" element={
+        <RouteGuard routeKey="dashboard">
+          <HomePage />
+        </RouteGuard>
+      } />
+      <Route path="/dashboard/sales" element={ 
+        <RouteGuard routeKey="sales">
+          <SalesPage />
+        </RouteGuard>
+       } />
+      <Route path="/dashboard/purchases" element={ 
+        <RouteGuard routeKey="purchases">
+          <PurchasesPage />
+        </RouteGuard>
+       } />
+      <Route path="/dashboard/logistics" element={ 
+        <RouteGuard routeKey="logistics">
+          <LogisticsPage />
+        </RouteGuard>
+       } />
+      <Route path="/dashboard/inventory" element={ 
+        <RouteGuard routeKey="inventory">
+          <InventoryPage />
+        </RouteGuard>
+       } />
       <Route path="*" element={ <NotFound /> } />
     </Routes>
   )

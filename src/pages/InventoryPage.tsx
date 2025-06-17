@@ -1,11 +1,10 @@
-import Header from "../components/Header";
 import HomeLayout from "../layout/HomeLayout";
+import InventoryView from "../views/InventoryView";
 
 const InventoryPage = () => {
     return (
         <HomeLayout>
-            <Header />
-            <h1>Inventario</h1>
+            <InventoryView />
         </HomeLayout>
     );
 }

@@ -1,9 +1,10 @@
-import { Cog8ToothIcon } from "@heroicons/react/16/solid";
+
 import { UserIcon } from "@heroicons/react/16/solid";
 
 import "../css/fonts.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Bars4Icon } from "@heroicons/react/16/solid";
+import { ArrowUturnLeftIcon } from "@heroicons/react/16/solid";
 
 interface HeaderProps {
     roleName?: string | null;
@@ -12,8 +13,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ roleName, onMenuClick }) => {
     const location = useLocation();
-
+    const navigate = useNavigate();
     const cleanPath = location.pathname.startsWith("/") ? location.pathname.slice(1) : location.pathname;
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+    }
 
     return (
         <header className="flex flex-col sm:flex-row justify-between items-center bg-indigo-50 w-full h:auto sm:h-24 px-4 sm:px-6 py-3 sm:py-0 gap-3 sm:gap-0">
@@ -31,12 +37,13 @@ const Header: React.FC<HeaderProps> = ({ roleName, onMenuClick }) => {
                     <input className="w-full bg-white border border-gray-200 pt-2 pb-2 pl-5 pr-5 rounded-2xl custom-font-m hidden lg:block lg:items-start" type="text" placeholder="Escribir aqui..." />
                 </div>
                 <div className="flex items-center">
-                    <ul className="flex items-center gap-2 text-gray-800 hover:cursor-pointer">
-                        <UserIcon className="size-6" />
+                    <ul className="flex items-center gap-2 text-gray-800 hover:cursor-pointer pl-3 border-l border-l-gray-300">
+                        <UserIcon className="size-5" />
                         <span className="truncate max-w-[250px] sm:max-w-none">Bienvenido, <b>{roleName}</b></span>
                     </ul>
-                    <ul className="ml-4 hover:text-gray-700 hover:cursor-pointer">
-                        <Cog8ToothIcon className="size-6" />
+                    <ul className="flex gap-2 pl-3 ml-4 border-l border-l-gray-300 text-red-500 hover:text-red-700 hover:cursor-pointer" onClick={handleLogout} title="Cerrar sesion">
+                        <ArrowUturnLeftIcon className="size-6" />
+                        <span className="hidden sm:inline">Cerrar sesion</span>
                     </ul>
                 </div>
             </div>

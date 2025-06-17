@@ -10,15 +10,17 @@ import "../css/fonts.css";
 import { ArrowLeftIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 4;
 
 const AdminView = () => {
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [modalType, setModalType] = useState<ModalType>(null);
     const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(false);
         fetch("http://localhost:8080/v1/api/admin/employees", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -29,13 +31,19 @@ const AdminView = () => {
             .catch(error => console.log(error));
     }, []);
 
-    // Paginacion en tabla empleados
+    if (loading) {
+        return (
+            <div className="w-full flex items-center justify-center h-96">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-indigo-500 border-solid"></div>
+                <span className="ml-4 text-gray-600">Cargando empleados...</span>
+            </div>
+        );
+    }
+
     const totalPages = Math.ceil(employees.length / PAGE_SIZE);
     const paginatedEmployees = employees.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
     console.log(employees);
-
-    // Manejos de modal [ADD, EDIT, DELETE]
 
     const openAddModal = () => {
         setSelectedEmployee(null);
@@ -56,8 +64,6 @@ const AdminView = () => {
         setModalType(null);
         setSelectedEmployee(null);
     }
-
-    // Render modal
 
     const renderModal = () => {
         if (!modalType) return null;
@@ -86,31 +92,43 @@ const AdminView = () => {
 
         return (
             <Modal onClose={closeModal}>
-                <h2 className="text-lg font-bold mb-4">
-                    {modalType === "ADD_EMPLOYEE" ? "Agregar Empleado" : "Editar Empleado"}
+                <h2 className="text-lg font-bold mb-4 text-gray-700">
+                    {modalType === "ADD_EMPLOYEE" ? "AGREGAR EMPLEADO" : "EDITAR EMPLEADO"}
                 </h2>
                 <form className="flex flex-col gap-4">
-                    <input className="border p-2 rounded" placeholder="Nombre" defaultValue={selectedEmployee?.employeeName || ""} />
-                    <input className="border p-2 rounded" placeholder="Apellido" defaultValue={selectedEmployee?.employeePaternalSurname || ""} />
-                    <input className="border p-2 rounded" placeholder="DNI" defaultValue={selectedEmployee?.employeeDni || ""} />
-                    <input className="border p-2 rounded" placeholder="Dirección" defaultValue={selectedEmployee?.employeeAddress || ""} />
-                    <input className="border p-2 rounded" placeholder="Teléfono" defaultValue={selectedEmployee?.employeePhoneNumber || ""} />
-                    <input className="border p-2 rounded" placeholder="Email" type="email" defaultValue={selectedEmployee?.employeeEmail || ""} />
-                    <input className="border p-2 rounded" placeholder="Rol" type="text" defaultValue={selectedEmployee?.employeeRoleName || ""} />
-                    <select>
-                        <option>ADMINISTRADOR</option>
-                        <option>VENTAS</option>
-                        <option>COMPRAS</option>
-                        <option>LOGISTICA</option>
-                        <option>GERENCIA</option>
-                    </select>
-                    <input className="border p-2 rounded" placeholder="Fecha de nacimiento" type="date" defaultValue={selectedEmployee ? new Date(selectedEmployee.employeeBirthDate).toISOString().split("T")[0] : ""} />
-                    <input className="border p-2 rounded" placeholder="Fecha de ingreso" type="date" defaultValue={selectedEmployee ? new Date(selectedEmployee.employeeEntryDate).toISOString().split("T")[0] : ""} />
+                    <input className="border p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="Nombre" defaultValue={selectedEmployee?.employeeName || ""} />
+                    <input className="border p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="Apellido" defaultValue={selectedEmployee?.employeePaternalSurname || ""} />
+                    <input className="border p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="DNI" defaultValue={selectedEmployee?.employeeDni || ""} />
+                    <input className="border p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="Dirección" defaultValue={selectedEmployee?.employeeAddress || ""} />
+                    <input className="border p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="Teléfono" defaultValue={selectedEmployee?.employeePhoneNumber || ""} />
+                    <input className="border p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="Email" type="email" defaultValue={selectedEmployee?.employeeEmail || ""} />
+                    {
+                        modalType === "ADD_EMPLOYEE" ? (
+                            <select className="border p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" defaultValue={selectedEmployee ? selectedEmployee.employeeRoleName : ""}>
+                                <option value="" disabled>Rol</option>
+                                <option value="1">ADMINISTRADOR</option>
+                                <option value="2">VENTAS</option>
+                                <option value="3">COMPRAS</option>
+                                <option value="4">LOGISTICA</option>
+                                <option value="5">GERENCIA</option>
+                            </select>
+                        ) : null
+                    }
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <div className="flex-1">
+                            <label className="block mb-1 text-gray-600">Fecha de nacimiento</label>
+                            <input className="border w-full p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="Fecha de nacimiento" type="date" defaultValue={selectedEmployee ? new Date(selectedEmployee.employeeBirthDate).toISOString().split("T")[0] : ""} />
+                        </div>
+                        <div className="flex-1">
+                            <label className="block mb-1 text-gray-600">Fecha de ingreso</label>
+                            <input className="border w-full p-2 rounded border-gray-300 text-gray-600 focus:outline-2 focus:outline-indigo-500 focus:outline-offset-2" placeholder="Fecha de ingreso" type="date" defaultValue={selectedEmployee ? new Date(selectedEmployee.employeeEntryDate).toISOString().split("T")[0] : ""} />
+                        </div>
+                    </div>
                     <div className="flex gap-2 mt-4">
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded" type="submit">
+                        <button className="bg-indigo-500 hover:bg-indigo-700 hover:cursor-pointer transition-colors text-white px-4 py-2 rounded" type="submit">
                             {modalType === "ADD_EMPLOYEE" ? "Agregar" : "Guardar"}
                         </button>
-                        <button className="bg-gray-300 px-4 py-2 rounded" type="button" onClick={closeModal}>Cancelar</button>
+                        <button className="bg-white px-4 py-2 border border-indigo-600 text-indigo-600 rounded hover:bg-gray-100 hover:cursor-pointer transition-colors" type="button" onClick={closeModal}>Cancelar</button>
                     </div>
                 </form>
             </Modal>
@@ -169,7 +187,7 @@ const AdminView = () => {
                         <tbody className="text-gray-600">
                             {
                                 paginatedEmployees.map(employee => (
-                                    <tr key={employee.employeeId} className="border-b border-gray-200">
+                                    <tr key={employee.employeeId} className="border-b border-gray-200 hover:bg-gray-100 transition-colors hover:cursor-pointer" onClick={() => openEditModal(employee)}>
                                         <td className="px-4 py-2 whitespace-nowrap custom-font-m">{employee.employeeId}</td>
                                         <td className="px-4 py-2 whitespace-nowrap custom-font-m">{employee.employeeName}</td>
                                         <td className="px-4 py-2 whitespace-nowrap custom-font-m">{employee.employeePaternalSurname}</td>
