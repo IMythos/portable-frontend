@@ -9,18 +9,20 @@ import { PencilSquareIcon } from "@heroicons/react/16/solid";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { TruckIcon } from "@heroicons/react/16/solid";
 import TopBrandsChart from "../components/TopBrandsChart";
+import type Warehouse from "../interfaces/Warehouse";
 
 const PAGE_SIZE = 5;
 
 const InventoryView = () => {
     const { role } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
+    const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const endpointRole = hasRole(role);
         const getProducts = async () => {
-            const endpointRole = hasRole(role);
             if (!endpointRole) return;
 
             try {
@@ -41,6 +43,25 @@ const InventoryView = () => {
             }
         };
 
+        const getWarehouses = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/v1/api/${endpointRole}/warehouses`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+
+                const data = await response.json();
+                console.log(data);
+                setWarehouses(data);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        getWarehouses();
         getProducts();
     }, [role]);
 
@@ -136,21 +157,15 @@ const InventoryView = () => {
                 <div className="flex flex-1 w-full bg-white rounded-lg p-6 flex-col gap-8">
                     <h2 className="text-xl font-bold ml-4 text-gray-800">Almacenes</h2>
                     <div className="w-full flex flex-1 items-center gap-7 justify-center">
-                        <div className="w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
-                            <TruckIcon className="size-10 mb-3" />
-                            <span className="font-bold">A001</span>
-                            <h2>COMPUPLAZA</h2>
-                        </div>
-                        <div className="w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
-                            <TruckIcon className="size-10 mb-3" />
-                            <span className="font-bold">A002</span>
-                            <h2>COMPUWILSON</h2>
-                        </div>
-                        <div className="w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
-                            <TruckIcon className="size-10 mb-3" />
-                            <span className="font-bold">A001</span>
-                            <h2>COMPUPALACE</h2>
-                        </div>
+                        {
+                            warehouses.map(warehouse => (
+                                <div className="w-40 h-40 border bg-white border-indigo-500 hover:bg-indigo-100 hover:cursor-pointer transition-all text-indigo-500 custom-font-m rounded-2xl flex items-center justify-center flex-col text-center hover:scale-105">
+                                    <TruckIcon className="size-10 mb-3" />
+                                    <span className="font-bold">{warehouse.warehouseCode}</span>
+                                    <h2>{warehouse.warehouseName}</h2>
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className="flex flex-1 justify-center items-center bg-white rounded-lg">
