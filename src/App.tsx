@@ -1,48 +1,50 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
-import HomePage from './pages/HomePage'
-import NotFound from './pages/NotFound'
-import SalesPage from './pages/SalesPage'
-import PurchasesPage from './pages/PurchasesPage'
-import LogisticsPage from './pages/LogisticsPage'
-import InventoryPage from './pages/InventoryPage'
-import LoginPage from './pages/LoginPage'
-import RouteGuard from './auth/RouteGuard'
-import UnauthorizedPage from './pages/UnauthorizedPage'
+
+import Login from './pages/Login'
+import HomeLayout from './layouts/HomeLayout'
+import Dashboard from './views/Dashboard'
+import EmployeesView from './views/EmployeesView'
+import ProductsView from './views/ProductsView'
+import EmployeeWithRole from './views/EmployeeWithRole'
+import ProductDetailView from './views/ProductDetail'
+import ProvidersView from './views/ProvidersView'
 
 function App() {
-
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={ <LoginPage />} />
-      <Route path="/unauthorized" element={ <UnauthorizedPage /> } />
+      <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={
-        <RouteGuard routeKey="dashboard">
-          <HomePage />
-        </RouteGuard>
+        <HomeLayout>
+          <Dashboard />
+        </HomeLayout>
       } />
-      <Route path="/dashboard/sales" element={ 
-        <RouteGuard routeKey="sales">
-          <SalesPage />
-        </RouteGuard>
-       } />
-      <Route path="/dashboard/purchases" element={ 
-        <RouteGuard routeKey="purchases">
-          <PurchasesPage />
-        </RouteGuard>
-       } />
-      <Route path="/dashboard/logistics" element={ 
-        <RouteGuard routeKey="logistics">
-          <LogisticsPage />
-        </RouteGuard>
-       } />
-      <Route path="/dashboard/inventory" element={ 
-        <RouteGuard routeKey="inventory">
-          <InventoryPage />
-        </RouteGuard>
-       } />
-      <Route path="*" element={ <NotFound /> } />
+      <Route path="/dashboard/employees" element={
+        <HomeLayout>
+          <EmployeesView />
+        </HomeLayout>
+      } />
+      <Route path="/dashboard/employees/:id" element={
+        <HomeLayout>
+          <EmployeeWithRole />
+        </HomeLayout>
+      } />
+      <Route path="/dashboard/products" element={
+        <HomeLayout>
+          <ProductsView />
+        </HomeLayout>
+      } />
+      <Route path="/dashboard/products/:id" element={
+        <HomeLayout>
+          <ProductDetailView />
+        </HomeLayout>
+      }/>
+      <Route path="/dashboard/providers" element={
+        <HomeLayout>
+          <ProvidersView />
+        </HomeLayout>
+      } />
     </Routes>
   )
 }

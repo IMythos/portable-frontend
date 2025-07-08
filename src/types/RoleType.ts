@@ -1,1 +1,0 @@
-export type RoleType = "ADMINISTRADOR" | "VENTAS" | "COMPRAS" | "LOGISTICA" | "INVENTARIO" | null;

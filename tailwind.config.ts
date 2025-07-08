@@ -7,6 +7,10 @@ export default withMT({
   ],
   theme: {
     extend: {},
+    backdropBlur: {
+      sm: "4px",
+      DEFAULT: "8px"
+    }
   },
   plugins: [],
 });
