@@ -37,7 +37,7 @@ const sidebarMenu = {
             label: "Reportes Globales",
             icon: DocumentChartBarIcon,
             children: [
-                { label: "Ventas", path: "/dashboard/reports/sales" },
+                { label: "Ventas", path: "/dashboard/sales" },
                 { label: "Compras", path: "/dashboard/reports/purchases" },
                 { label: "Inventario", path: "/dashboard/reports/inventory" }
             ]
